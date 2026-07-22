@@ -95,6 +95,7 @@ The live user comes with pre-configured aliases from `.bash_aliases`. No `sudo` 
 | `cpf` | Clean, purge, and fix broken packages |
 
 See [MadCarter's](https://madcarters.com/config.html) for more handy aliases and keybinds, etc.
+Or just fire-up the terminal with win+t and type: aliases and geany will open to the file.
 
 ## Project Structure
 
