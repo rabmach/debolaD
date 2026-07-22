@@ -1,0 +1,53 @@
+#!/bin/sh
+
+. /usr/lib/live/config.sh
+
+Cmdline ()
+{
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
+	do
+		case "${_PARAMETER}" in
+			live-config.username=*|username=*)
+				LIVE_USERNAME="${_PARAMETER#*username=}"
+				;;
+		esac
+	done
+}
+
+Init ()
+{
+	if ! pkg_is_installed "udisks2" || \
+	   component_was_executed "9010-udisks-fix"
+	then
+		exit 0
+	fi
+
+	echo -n " udisks-fix"
+}
+
+Config ()
+{
+	mkdir -p /usr/share/polkit-1/rules.d
+
+	cat > /usr/share/polkit-1/rules.d/99-udisks2-live.rules << UAEOF
+polkit.addRule(function(action, subject) {
+	if (subject.local &&
+		subject.active &&
+		subject.user === "${LIVE_USERNAME}") {
+		if (action.id.indexOf("org.freedesktop.udisks2.") === 0) {
+			return polkit.Result.YES;
+		}
+	}
+});
+UAEOF
+
+	if id "${LIVE_USERNAME}" >/dev/null 2>&1; then
+		usermod -a -G plugdev,lpadmin,storage "${LIVE_USERNAME}" 2>/dev/null || true
+	fi
+
+	touch /var/lib/live/config/9010-udisks-fix
+}
+
+Cmdline
+Init
+Config

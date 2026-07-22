@@ -1,0 +1,22 @@
+# Build artifacts
+chroot/
+chroot.tmp/
+cache/
+binary/
+.output/
+live-build/
+build.log
+*.iso
+*.log
+*.stage
+.build/
+binary.modified_timestamps
+chroot.files
+chroot.packages.*
+live-image-amd64.*
+
+# Live-build generated
+auto/
+local/
+config/common
+config/live/

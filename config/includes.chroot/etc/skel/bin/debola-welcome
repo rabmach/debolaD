@@ -1,0 +1,23 @@
+#!/bin/bash
+### debola-welcome - first-boot message for live ISO users
+
+sleep 6
+
+TEXT="<b>Welcome to Debola!</b>
+
+<b>Local Drives</b>
+To access local partitions, open Thunar and click the partition in the sidebar,
+or mount manually:
+  <i>sudo mount /dev/sdXY /mnt</i>
+
+<b>External Monitor</b>
+To use an external monitor, uncomment the first line in:
+  <i>~/.config/openbox/autostart</i>
+
+<b>Extra Packages</b>
+Firefox and Sublime Text repos are pre-configured. Install with:
+  <i>sudo apt install firefox sublime-text</i>
+
+<b>Live User:</b> debola / debola"
+
+zenity --info --title="Debola" --width=420 --text="$TEXT" 2>/dev/null &

@@ -1,0 +1,60 @@
+#!/bin/sh
+# Copy debola configs from /etc/skel to live user's home
+# Runs every boot — live-boot creates the user from skel first
+DEST="/home/debola"
+[ ! -d "$DEST" ] && exit 0
+
+# Copy dotfiles (overwrite — skel is the source of truth)
+for f in .bashrc .bash_aliases .bash_functions .bashcolors .gtkrc-2.0 .xinitrc; do
+    [ -f "/etc/skel/$f" ] && cp -a "/etc/skel/$f" "$DEST/$f" 2>/dev/null || true
+done
+
+# .profile — don't overwrite if startx is already configured
+if [ -f /etc/skel/.profile ] && ! grep -q "startx" "$DEST/.profile" 2>/dev/null; then
+    cp -a /etc/skel/.profile "$DEST/.profile" 2>/dev/null || true
+fi
+
+# Copy skel config dirs (don't clobber existing)
+if [ -d /etc/skel/.config ]; then
+    mkdir -p "$DEST/.config"
+    cp -an /etc/skel/.config/* "$DEST/.config/" 2>/dev/null || true
+fi
+
+if [ -d /etc/skel/.local ]; then
+    mkdir -p "$DEST/.local"
+    cp -an /etc/skel/.local/* "$DEST/.local/" 2>/dev/null || true
+fi
+
+# Copy bin scripts
+if [ -d /etc/skel/bin ]; then
+    mkdir -p "$DEST/bin"
+    cp -a /etc/skel/bin/* "$DEST/bin/" 2>/dev/null || true
+    chmod +x "$DEST/bin/"* 2>/dev/null || true
+fi
+
+# Copy Pictures (wallpapers, etc.)
+if [ -d /etc/skel/Pictures ]; then
+    mkdir -p "$DEST/Pictures"
+    cp -an /etc/skel/Pictures/* "$DEST/Pictures/" 2>/dev/null || true
+fi
+
+# Copy .local/share
+if [ -d /etc/skel/.local/share ]; then
+    mkdir -p "$DEST/.local/share"
+    cp -an /etc/skel/.local/share/* "$DEST/.local/share/" 2>/dev/null || true
+fi
+
+# Create XDG directories
+mkdir -p "$DEST"/{Documents,Downloads,Music,Pictures,Videos,Desktop}
+
+# Make xinitrc executable
+chmod +x "$DEST/.xinitrc" 2>/dev/null || true
+
+# Replace $USER tokens in config files
+for f in "$DEST/.config/wallpapers.cfg" "$DEST/.config/pianobar/config" \
+         "$DEST/.config/gtk-3.0/bookmarks" "$DEST/bin/frank"; do
+    [ -f "$f" ] && sed -i "s/\\\$USER/debola/g" "$f" 2>/dev/null || true
+done
+
+chown -R debola:debola "$DEST" 2>/dev/null || true
+exit 0

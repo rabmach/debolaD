@@ -1,0 +1,32 @@
+#!/bin/sh
+# Polkit rules for drive mounting without password
+cat > /etc/polkit-1/localauthority/50-local.d/10-mount.pkla << EOF
+[Mount Any Partition]
+Identity=unix-user:debola
+Action=org.freedesktop.udisks2.filesystem-mount-system;org.freedesktop.udisks2.filesystem-mount;org.freedesktop.udisks2.filesystem-mount-other-seat
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+
+[Mount via UDisks1]
+Identity=unix-user:debola
+Action=org.freedesktop.udisks.filesystem-mount-system;org.freedesktop.udisks.filesystem-mount
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+
+[Unmount via UDisks2]
+Identity=unix-user:debola
+Action=org.freedesktop.udisks2.filesystem-unmount-system;org.freedesktop.udisks2.filesystem-unmount-other-seat
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+
+[Power off drive via UDisks2]
+Identity=unix-user:debola
+Action=org.freedesktop.udisks2.power-off-drive-system
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+EOF
+exit 0

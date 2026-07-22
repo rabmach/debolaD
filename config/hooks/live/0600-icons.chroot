@@ -1,0 +1,23 @@
+#!/bin/sh
+# Download and install Dracula and Kora icon themes
+DL="/tmp/debola-icons"
+mkdir -p "$DL"
+
+# Dracula GTK icons
+wget -q -O "$DL/Dracula.zip" "https://github.com/dracula/gtk/files/5214870/Dracula.zip" 2>/dev/null && \
+    unzip -o "$DL/Dracula.zip" -d "$DL/dracula" 2>/dev/null && \
+    [ -d "$DL/dracula/Dracula" ] && \
+    cp -R "$DL/dracula/Dracula" /usr/share/icons/ 2>/dev/null || \
+    echo "Warning: Could not install Dracula icons"
+
+# Kora icon theme
+wget -q -O "$DL/kora.zip" "https://github.com/bikass/kora/archive/refs/heads/master.zip" 2>/dev/null && \
+    unzip -o "$DL/kora.zip" -d "$DL/kora" 2>/dev/null && \
+    [ -d "$DL/kora/kora-master/kora" ] && \
+    mkdir -p /home/debola/.local/share/icons && \
+    cp -R "$DL/kora/kora-master/kora" /home/debola/.local/share/icons/ 2>/dev/null || \
+    echo "Warning: Could not install Kora icons"
+
+chown -R debola:debola /home/debola/.local 2>/dev/null || true
+rm -rf "$DL"
+exit 0

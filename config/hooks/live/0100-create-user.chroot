@@ -1,0 +1,8 @@
+#!/bin/sh
+# Live-boot creates the user at boot via kernel params (username=debola)
+# We just pre-stage sudoers and root password for the chroot build phase
+echo "root:toor" | chpasswd
+mkdir -p /etc/sudoers.d
+echo "debola ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/debola
+chmod 440 /etc/sudoers.d/debola
+exit 0

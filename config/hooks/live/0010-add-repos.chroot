@@ -1,0 +1,31 @@
+#!/bin/sh
+set -eu
+echo "==> Adding external repositories..."
+mkdir -p /etc/apt/keyrings
+
+# Mozilla (Firefox)
+if [ ! -f /etc/apt/sources.list.d/mozilla.list ]; then
+    wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- \
+        | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+    echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" \
+        | tee /etc/apt/sources.list.d/mozilla.list > /dev/null
+    cat > /etc/apt/preferences.d/mozilla <<'EOF'
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+EOF
+    echo "  Mozilla repository added and pinned."
+fi
+
+# Sublime Text
+if [ ! -f /etc/apt/sources.list.d/sublime-text.sources ]; then
+    wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg \
+        | tee /etc/apt/keyrings/sublimehq-pub.asc > /dev/null
+    printf 'Types: deb\nURIs: https://download.sublimetext.com/\nSuites: apt/stable/\nSigned-By: /etc/apt/keyrings/sublimehq-pub.asc\n' \
+        | tee /etc/apt/sources.list.d/sublime-text.sources > /dev/null
+    echo "  Sublime Text repository added."
+fi
+
+apt-get update || true
+echo "==> External repositories configured."
+exit 0

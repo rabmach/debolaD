@@ -1,0 +1,14 @@
+#!/bin/sh
+# Configure desktop alternatives and services
+update-alternatives --install /usr/bin/x-file-manager x-file-manager /usr/bin/thunar 230 2>/dev/null || true
+update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 210 2>/dev/null || true
+update-alternatives --install /usr/bin/x-text-editor x-text-editor /usr/bin/geany 200 2>/dev/null || true
+
+cp /usr/share/applications/notification-daemon.desktop /etc/xdg/autostart/ 2>/dev/null || true
+chmod +x /etc/xdg/autostart/notification-daemon.desktop 2>/dev/null || true
+
+systemctl enable cups 2>/dev/null || true
+systemctl enable bluetooth 2>/dev/null || true
+
+su - debola -c 'xdg-user-dirs-update' 2>/dev/null || true
+exit 0

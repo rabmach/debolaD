@@ -1,0 +1,34 @@
+#!/bin/sh
+. /usr/lib/live/config.sh
+
+Cmdline ()
+{
+    for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
+    do
+        case "${_PARAMETER}" in
+            live-config.username=*|username=*)
+                LIVE_USERNAME="${_PARAMETER#*username=}"
+                ;;
+        esac
+    done
+}
+
+Config ()
+{
+    DEST="/home/${LIVE_USERNAME}"
+    if [ -z "$DEST" ] || [ "$DEST" = "/home/" ]; then
+        touch /var/lib/live/config/8000-copy-skel
+        return
+    fi
+    if [ ! -d "$DEST/.config" ]; then
+        if [ -d /etc/skel ]; then
+            mkdir -p "$DEST"
+            cp -a /etc/skel/. "$DEST/" 2>/dev/null || true
+            chown -R 1000:1000 "$DEST" 2>/dev/null || true
+        fi
+    fi
+    touch /var/lib/live/config/8000-copy-skel
+}
+
+Cmdline
+Config

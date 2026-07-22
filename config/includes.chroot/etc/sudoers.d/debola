@@ -1,0 +1,4 @@
+# Debola live user permissions
+debola ALL=(ALL) NOPASSWD: /bin/mount, /bin/umount
+debola ALL=(ALL) NOPASSWD: /usr/bin/udisksctl
+debola ALL=(ALL) NOPASSWD: ALL

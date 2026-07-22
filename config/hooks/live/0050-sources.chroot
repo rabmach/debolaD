@@ -1,0 +1,15 @@
+#!/bin/sh
+# Set up APT sources for trixie
+cp /etc/apt/sources.list /etc/apt/sources.list.bak 2>/dev/null || true
+
+cat > /etc/apt/sources.list << 'SOURCES'
+deb http://deb.debian.org/debian/ trixie main contrib non-free non-free-firmware
+deb-src http://deb.debian.org/debian/ trixie main contrib non-free non-free-firmware
+deb http://security.debian.org/debian-security trixie-security main contrib non-free non-free-firmware
+deb-src http://security.debian.org/debian-security trixie-security main contrib non-free non-free-firmware
+deb http://deb.debian.org/debian/ trixie-updates main contrib non-free non-free-firmware
+deb-src http://deb.debian.org/debian/ trixie-updates main contrib non-free non-free-firmware
+SOURCES
+
+apt-get update || true
+exit 0

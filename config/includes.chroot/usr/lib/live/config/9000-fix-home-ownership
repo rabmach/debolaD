@@ -1,0 +1,26 @@
+#!/bin/sh
+
+. /usr/lib/live/config.sh
+
+Init ()
+{
+	if ! pkg_is_installed "sudo" || \
+	   component_was_executed "9000-fix-home-ownership"
+	then
+		exit 0
+	fi
+
+	echo -n " fix-home-ownership"
+}
+
+Config ()
+{
+	if id debola >/dev/null 2>&1; then
+		chown -R 1000:1000 /home/debola/ 2>/dev/null || true
+	fi
+
+	touch /var/lib/live/config/9000-fix-home-ownership
+}
+
+Init
+Config

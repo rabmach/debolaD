@@ -1,0 +1,6 @@
+#!/bin/sh
+# Ensure live user owns their home directory
+if id debola >/dev/null 2>&1; then
+    chown -R debola:debola /home/debola/ 2>/dev/null || true
+fi
+exit 0
