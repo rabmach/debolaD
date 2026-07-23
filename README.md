@@ -15,7 +15,6 @@ Built on Debian Trixie with [live-build](https://live-team.pages.debian.net/live
 - **Auto-login** to a working desktop -- boot and go
 - BIOS (syslinux) and UEFI (GRUB) boot support
 - ISO-hybrid image -- dd to USB and boot
-- **Welcome message** on first boot with tips for local drives, external monitors, and extra packages
 - **External repos** pre-configured for Firefox and Sublime Text
 - **Handy aliases** -- `install packagename`, `remove packagename`, `search term`, and more
 
@@ -30,6 +29,11 @@ This is a **live ISO only**. To set up Debola on a permanent system:
 ```bash
 git clone https://github.com/rabmach/debola.git
 cd debola
+chmod +x restore.sh
+sudo ./restore.sh
+
+--OR--
+
 sudo ./tasks/01-repos.sh    # Add repos (Mozilla, Sublime Text)
 sudo ./tasks/02-packages.sh # Install packages
 sudo ./tasks/03-icons.sh    # Install icon themes
