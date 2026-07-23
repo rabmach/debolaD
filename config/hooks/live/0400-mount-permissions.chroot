@@ -1,5 +1,5 @@
 #!/bin/sh
-# Polkit rules for drive mounting without password
+mkdir -p /etc/polkit-1/localauthority/50-local.d
 cat > /etc/polkit-1/localauthority/50-local.d/10-mount.pkla << EOF
 [Mount Any Partition]
 Identity=unix-user:debola

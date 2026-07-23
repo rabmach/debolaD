@@ -1,6 +1,6 @@
 # Debola
 
-A custom Debian Trixie live ISO with Openbox desktop. Boot it, use it, install it.
+A custom Debian Trixie live ISO with Openbox desktop. Boot it, use it.
 
 Built on Debian Trixie with [live-build](https://live-team.pages.debian.net/live-manual/). No GNOME, no tasksel, no bloat. A fast, keyboard-driven Openbox desktop with everything you actually need.
 
@@ -13,12 +13,32 @@ Built on Debian Trixie with [live-build](https://live-team.pages.debian.net/live
 - **WiFi** (iwlwifi, realtek, atheros, brcm) and **Bluetooth** (bluez) support
 - **Live user**: `debola` / `debola` with full NOPASSWD sudo
 - **Auto-login** to a working desktop -- boot and go
-- **Debian installer** included -- install to disk from the live session
 - BIOS (syslinux) and UEFI (GRUB) boot support
 - ISO-hybrid image -- dd to USB and boot
 - **Welcome message** on first boot with tips for local drives, external monitors, and extra packages
 - **External repos** pre-configured for Firefox and Sublime Text
 - **Handy aliases** -- `install packagename`, `remove packagename`, `search term`, and more
+
+## Installing to Disk
+
+This is a **live ISO only**. To set up Debola on a permanent system:
+
+1. Install Debian Trixie normally (net-install or standard DVD)
+2. After install, clone the [debola](https://github.com/rabmach/debola) repo
+3. Run the restore scripts to apply all Debola configs:
+
+```bash
+git clone https://github.com/rabmach/debola.git
+cd debola
+sudo ./tasks/01-repos.sh    # Add repos (Mozilla, Sublime Text)
+sudo ./tasks/02-packages.sh # Install packages
+sudo ./tasks/03-icons.sh    # Install icon themes
+sudo ./tasks/04-config.sh   # Apply configs and dotfiles
+sudo ./tasks/05-tweaks.sh   # System tweaks and settings
+sudo ./tasks/06-finish.sh   # Final touches
+```
+
+The restore scripts handle everything: packages, configs, icons, wallpapers, aliases, and all the Openbox customizations.
 
 ## Building the ISO
 
@@ -79,8 +99,6 @@ sync
 1. Boot from the USB
 2. Select **Debola Live** from the boot menu
 3. You're in. User: `debola`, Password: `debola`
-
-To install to disk, select **Install Debian** from the boot menu or run the installer from the desktop.
 
 ## Handy Aliases
 

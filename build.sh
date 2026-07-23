@@ -186,7 +186,6 @@ lb config noauto \
     --archive-areas "main contrib non-free non-free-firmware" \
     --binary-images iso-hybrid \
     --bootloaders "syslinux grub-efi" \
-    --debian-installer live \
     --memtest none \
     --apt-recommends false \
     --firmware-chroot false \

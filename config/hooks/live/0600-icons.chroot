@@ -10,14 +10,15 @@ wget -q -O "$DL/Dracula.zip" "https://github.com/dracula/gtk/files/5214870/Dracu
     cp -R "$DL/dracula/Dracula" /usr/share/icons/ 2>/dev/null || \
     echo "Warning: Could not install Dracula icons"
 
-# Kora icon theme
+# Kora icon theme - install system-wide, not per-user
 wget -q -O "$DL/kora.zip" "https://github.com/bikass/kora/archive/refs/heads/master.zip" 2>/dev/null && \
     unzip -o "$DL/kora.zip" -d "$DL/kora" 2>/dev/null && \
     [ -d "$DL/kora/kora-master/kora" ] && \
-    mkdir -p /home/debola/.local/share/icons && \
-    cp -R "$DL/kora/kora-master/kora" /home/debola/.local/share/icons/ 2>/dev/null || \
+    cp -R "$DL/kora/kora-master/kora" /usr/share/icons/ 2>/dev/null || \
     echo "Warning: Could not install Kora icons"
 
-chown -R debola:debola /home/debola/.local 2>/dev/null || true
+# Clean up any leftover /home/debola from previous builds
+rm -rf /home/debola 2>/dev/null || true
+
 rm -rf "$DL"
 exit 0

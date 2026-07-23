@@ -1,9 +1,24 @@
 #!/bin/bash
-### debola-welcome - first-boot message for live ISO users
+### debola-welcome - runs on first boot (live or installed)
 
 sleep 6
 
-TEXT="<b>Welcome to Debola!</b>
+# Check if debola configs are present
+CONFIGS_PRESENT=false
+if [[ -f ~/.config/openbox/autostart ]] && grep -q "waldesk" ~/.config/openbox/autostart 2>/dev/null; then
+    CONFIGS_PRESENT=true
+fi
+
+# Detect if running live or installed
+if grep -qs "boot=live" /proc/cmdline 2>/dev/null; then
+    ENV="live"
+else
+    ENV="installed"
+fi
+
+if $CONFIGS_PRESENT; then
+    if [[ "$ENV" == "live" ]]; then
+        TEXT="<b>Welcome to Debola!</b>
 
 <b>Local Drives</b>
 To access local partitions, open Thunar and click the partition in the sidebar,
@@ -16,8 +31,32 @@ To use an external monitor, uncomment the first line in:
 
 <b>Extra Packages</b>
 Firefox and Sublime Text repos are pre-configured. Install with:
-  <i>sudo apt install firefox sublime-text</i>
+  <i>install firefox</i>
+  <i>install sublime-text</i>
 
 <b>Live User:</b> debola / debola"
+    else
+        TEXT="<b>Welcome to Debola!</b>
+
+Debola configs are installed and ready.
+
+<b>External Monitor</b>
+Uncomment the first line in:
+  <i>~/.config/openbox/autostart</i>
+
+<b>Handy Aliases</b>
+  <i>install packagename</i> - install software
+  <i>remove packagename</i> - remove software
+  <i>search term</i> - search for packages
+  <i>apps</i> - open Synaptic"
+
+    fi
+else
+    TEXT="<b>Welcome to Debola!</b>
+
+Debola configs were not found. To install them:
+  <i>git clone https://github.com/rabmach/debola ~/debola</i>
+  <i>cd ~/debola && bash tasks/04-config.sh</i>"
+fi
 
 zenity --info --title="Debola" --width=420 --text="$TEXT" 2>/dev/null &
